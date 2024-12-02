@@ -1,9 +1,7 @@
-from pathlib import Path
+
 import os
 import sys
 import json
-
-
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -13,7 +11,6 @@ import certifi
 ca = certifi.where()
 
 import pandas as pd
-import numpy as np
 import pymongo
 from networksecurity.exception.exception import NetworkSecurityException
 from networksecurity.logging.logger import logging
@@ -29,10 +26,11 @@ class NetworkDataExtract():
 
         try: 
             data = pd.read_csv(file_path)
+            print(data.head())
             data.reset_index(drop = True, inplace=True)
 
             # convert to json data
-            records = json.loads(data.T.to_json().values())
+            records = list(json.loads(data.T.to_json()).values())
             return records
 
         except Exception as e:
@@ -45,8 +43,9 @@ class NetworkDataExtract():
             self.records = records
 
             self.mongo_client = pymongo.MongoClient(MONGO_DB_URL)
+            self.database = self.mongo_client[self.database]
 
-            self.database = self.database[self.collection]
+            self.collection = self.database[self.collection]
             self.collection.insert_many(self.records)
             return (len(self.records))
         
@@ -54,11 +53,13 @@ class NetworkDataExtract():
             raise NetworkSecurityException(e, sys)
 
 
-if __name__ == '__mian__':
-    FILE_PATH = "Network_Data\phisingData.csv"
-    DATABASE = "alexdlpdlp"
+if __name__ == '__main__':
+    FILE_PATH = "network_data\phisingData.csv"
+    DATABASE = "AlexDLP"
     networkobj = NetworkDataExtract()
     records = networkobj.cv_to_json_convertor(file_path=FILE_PATH)
+    print(records)
     no_of_records = networkobj.insert_data_mongodb(records=records,
                                                    database=DATABASE,
                                                    collection="NetworkData")
+    print(no_of_records)
