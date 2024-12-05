@@ -18,3 +18,9 @@ el primer paso es la ingestion desde el csv a mongo db.
 luego viene la data ingestion part
 
 ![alt text](image-1.png)
+
+
+## data validation
+
+data drif, data schema.
+
