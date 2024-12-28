@@ -2,12 +2,22 @@
 
 ## Setup file creation
 
+## Environment
 
+El environment se crea de manera local con:
+```
+conda create -p .venv python=3.10
+```
+y se activa con:
+```
+conda activate ./.venv
+```
+Después, se pueden instalar las librerias.
 
 ## ETL Pipeline
 
 
-el vido 127 explica lo que es un etl. hay que explciarlo aqui.
+el vido 127 explica lo que es un etl. hay que explicarlo aqui.
 
 ![alt text](image.png)
 
@@ -24,3 +34,6 @@ luego viene la data ingestion part
 
 data drif, data schema.
 
+## Variables de entorno
+en el archivo .env deberá haber las siguientes variables
+MONGO_DB_URL
