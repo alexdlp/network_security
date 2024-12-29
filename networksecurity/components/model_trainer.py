@@ -1,5 +1,9 @@
 import sys
 import os
+import mlflow
+import dagshub
+dagshub.init(repo_owner='alexdlp.dlp', repo_name='network_security', mlflow=True)
+
 
 from networksecurity.constants.training_pipeline import  TARGET_COLUMN
 from networksecurity.constants.training_pipeline import DATA_TRANSFORMATION_IMPUTER_PARAMS
@@ -31,6 +35,18 @@ class ModelTrainer:
                  data_transformation_artifact: DataTransformationArtifact):
         self.model_trainer_config = model_trainer_config
         self.data_transformation_artifact = data_transformation_artifact
+
+
+    def track_mlflow(self, model, classification_train_metric):
+
+        with mlflow.start_run():
+
+            mlflow.log_metric("f1_score", classification_train_metric.f1_score)
+            mlflow.log_metric("precision", classification_train_metric.precision)
+            mlflow.log_metric("recall", classification_train_metric.recall)
+
+            mlflow.sklearn.log_model(model, "model")
+
 
     def train_model(self, X_train, Y_train, X_test, Y_test):
         models = {
@@ -88,14 +104,15 @@ class ModelTrainer:
         best_model = models[best_model_name]
 
         y_train_pred = best_model.predict(X_train)
-
         classification_train_metric = get_classification_metrics(Y_train, y_train_pred)
-
-
-        ## Tracking in mlflow
 
         y_test_pred = best_model.predict(X_test)
         classificaion_test_metric = get_classification_metrics(Y_test, y_test_pred)
+
+         ## Tracking with mlflow
+        self.track_mlflow(best_model, classification_train_metric)
+        self.track_mlflow(best_model, classificaion_test_metric)
+
 
         preprocessor = load_object(self.data_transformation_artifact.transformed_object_file_path)
 
@@ -104,7 +121,7 @@ class ModelTrainer:
 
         Network_Model = NetworkModel(preprocessor, best_model)
         save_object(self.model_trainer_config.trained_model_dir, Network_Model)
-        print("Model saved successfully")
+        save_object("final_model/model.pkl", Network_Model)
         
         
         ## Model Trainer Artifact
@@ -113,8 +130,7 @@ class ModelTrainer:
                                                       test_mertric_artifact=classificaion_test_metric)
         
         return model_trainer_artifact
-
-
+    
 
 
 
