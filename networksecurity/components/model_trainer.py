@@ -43,29 +43,36 @@ class ModelTrainer:
 
         params = {
             "DecisionTree": {
-                "criterion":["gin", "entropy", "log_loss"],
+                #"criterion":["gini", "entropy", "log_loss"],
+                "criterion":["gini"],
                 "max_depth": [5],
                 # "splitter": ["best", "random"],
                 # "max_features": [ "sqrt", "log2"],
             },
             "RandomForest": {
-                "n_estimators": [8, 16, 32, 64, 128, 256],
+                #"n_estimators": [8, 16, 32, 64, 128, 256],
+                "n_estimators": [256],
                 # "criterion": ["gin", "entropy", "log_loss"],
                 # "max_depth": 5,
                 # "max_features": ["sqrt", "log2"],
             },
             "GradientBoosting": {
                 # "loss": ["deviance", "exponential"],
-                "learning_rate": [0.1, 0.05, 0.01, 0.005, 0.001],
-                "subsample": [0.6, 0.7, 0.75, 0.8, 0.85, 0.9],
+                # "learning_rate": [0.1, 0.05, 0.01, 0.005, 0.001],
+                # "subsample": [0.6, 0.7, 0.75, 0.8, 0.85, 0.9],
                 # "criterion": ["friedman_mse", "mse", "mae"],
                 # "max_features": ["sqrt", "log2"],
-                "n_estimators": [16, 32, 64, 128, 256],
+                # "n_estimators": [16, 32, 64, 128, 256],
+                "learning_rate": [0.001],
+                "subsample": [0.85],
+                "n_estimators": [256],
             },
             "LogisticRegression": {},
             "AdaBoost": {
-                "n_estimators": [8, 16, 32, 64, 128, 256],
-                "learning_rate": [0.1, 0.05, 0.01, 0.005, 0.001],
+                # "n_estimators": [8, 16, 32, 64, 128, 256],
+                # "learning_rate": [0.1, 0.05, 0.01, 0.005, 0.001],
+                "n_estimators": [256],
+                "learning_rate": [0.001],
             }
         }
 
@@ -96,14 +103,16 @@ class ModelTrainer:
         os.makedirs(model_dir_path, exist_ok=True)
 
         Network_Model = NetworkModel(preprocessor, best_model)
-        save_object(self.model_trainer_config.model_trainer_dir, Network_Model)
-
-        ## Model Trainer Artifact
-        ModelTrainerArtifact(trained_model_dir=self.model_trainer_config.model_trainer_dir,
-                             train_metric_artifact=classification_train_metric,
-                             test_mertric_artifact=classificaion_test_metric)
+        save_object(self.model_trainer_config.trained_model_dir, Network_Model)
+        print("Model saved successfully")
         
-        return ModelTrainerArtifact
+        
+        ## Model Trainer Artifact
+        model_trainer_artifact = ModelTrainerArtifact(trained_model_dir=self.model_trainer_config.model_trainer_dir,
+                                                      train_metric_artifact=classification_train_metric,
+                                                      test_mertric_artifact=classificaion_test_metric)
+        
+        return model_trainer_artifact
 
 
 

@@ -15,6 +15,7 @@ TEST_FILE_NAME :str = "test.csv"
 SCHEMA_FILE_PATH = Path("data_schema") / "schema.yaml"
 
 SAVED_MODEL_DIR = Path("saved_models")
+MODEL_FILE_NAME = "model.pkl"
 
 """
 Data Ingestion related constant start with DATA_INGESTION VAR NAME
@@ -59,7 +60,6 @@ Model Training related constant start with MODEL_TRAINER
 """
 MODEL_TRAINER_DIR_NAME: str = "model_trainer"
 MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model"
-MODEL_FILE_NAME: str = "model.pkl"
 MODEL_TRAINER_EXPECTED_ACCURACY: float = 0.6
 MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD : float = 0.05
 
