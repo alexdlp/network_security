@@ -37,3 +37,13 @@ data drif, data schema.
 ## Variables de entorno
 en el archivo .env deberá haber las siguientes variables
 MONGO_DB_URL
+
+
+### Iam policies
+Para subir los modelos a aws, se debe descargar el cli y crear un usuario iam.
+A este usuario se le dan permisos de AmazonS3FullAccess.
+
+Con el usuario aim creado, se le dan claves de acceso para el cli. Con esas claves, se va al cli y se configura con 
+"""{cmd}
+aws configure
+"""

@@ -33,12 +33,12 @@ DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO:float = 0.2
 Data Validation related constant start with DATA_VALIDATION VAR NAME
 """
 
-DATA_VALIADTION_DIR_NAME: str = "data_validation"
+DATA_VALIDATION_DIR_NAME: str = "data_validation"
 DATA_VALIDATION_VALID_DIR: str = "validated"
 DATA_VALIDATION_INVALID_DIR: str = "invalid"
 DATA_VALIDATION_DRIFT_REPORT_DIR: str = "drift_report"
 DATA_VALIDATION_DRIFT_REPORT_FILE_NAME: str = "report.yaml"
-PRERPOCESSING_OBJECT_FILE_NAME:str = "preprocessor.pkl"
+PREPROCESSING_OBJECT_FILE_NAME:str = "preprocessor.pkl"
 
 """
 Data Transformation related constant start with DATA_TRANSFORMATION
@@ -62,4 +62,6 @@ MODEL_TRAINER_DIR_NAME: str = "model_trainer"
 MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model"
 MODEL_TRAINER_EXPECTED_ACCURACY: float = 0.6
 MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD : float = 0.05
+
+TRAINING_BUCKET_NAME: str = "networksecurity-udemy"
 

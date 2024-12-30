@@ -24,10 +24,14 @@ from networksecurity.entity.artifact_entity import (
     ModelTrainerArtifact
 )
 
+from networksecurity.constants.training_pipeline import TRAINING_BUCKET_NAME
+from networksecurity.cloud.s3_syncer import S3Sync
+
 
 class TrainingPipeline:
     def __init__(self):
         self.training_pipeline_config = TrainingPipelineConfig()
+        self.s3_sync = S3Sync()
 
     def start_data_ingestion(self) -> DataIngestionArtifact:
         try:
@@ -88,12 +92,40 @@ class TrainingPipeline:
         except NetworkSecurityException as e:
             raise NetworkSecurityException(e, sys)
         
+
+    def sync_artifact_dir_to_s3(self):
+        """
+        Sync the artifact directory to s3 bucket
+        """
+        try:
+            aws_bucket_url = f"s3://{TRAINING_BUCKET_NAME}/artifact/{self.training_pipeline_config.timestamp}"
+            self.s3_sync.sync_folder_to_s3(folder = self.training_pipeline_config.artifact_dir, 
+                                          bucket_name = aws_bucket_url)
+
+        except NetworkSecurityException as e:
+            raise NetworkSecurityException(e, sys)
+        
+    def sync_saved_model_dir_to_s3(self):
+        """
+        Sync the final model directory to s3 bucket
+        """
+        try:
+            aws_bucket_url = f"s3://{TRAINING_BUCKET_NAME}/final_model/{self.training_pipeline_config.timestamp}"
+            self.s3_sync.sync_folder_to_s3(folder = self.training_pipeline_config.model_dir, 
+                                          bucket_name = aws_bucket_url)
+        
+        except NetworkSecurityException as e:
+            raise NetworkSecurityException(e, sys)
+        
     def run_training_pipeline(self):
         try:
             data_ingestion_artifact = self.start_data_ingestion()
             data_validation_artifact = self.start_data_validation(data_ingestion_artifact)
             data_transformation_artifact = self.start_data_transformation(data_validation_artifact)
             model_trainer_artifact = self.start_model_training(data_transformation_artifact)
+
+            self.sync_artifact_dir_to_s3()
+            self.sync_saved_model_dir_to_s3()
             
             return model_trainer_artifact
         
