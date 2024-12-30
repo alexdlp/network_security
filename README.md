@@ -47,3 +47,5 @@ Con el usuario aim creado, se le dan claves de acceso para el cli. Con esas clav
 """{cmd}
 aws configure
 """
+
+![alt text](image-2.png)
