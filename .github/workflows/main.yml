@@ -59,9 +59,3 @@ jobs:
 
       - name: Run tests
         run: echo "Running tests"
-
-      - name: Build
-        run: npm run build
-
-      - name: Deploy
-        run: echo "Deploying to production server"
