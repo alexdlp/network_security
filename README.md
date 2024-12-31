@@ -54,4 +54,4 @@ aws configure
 Se crea un repo en ECR en AWS
 Se agrega el repo erc como secretos en github.
 
-el usuario im necesita permisos AmazonEC2ContainerRegistryFullAccess para 
+el usuario im necesita permisos AmazonEC2ContainerRegistryFullAccess para logear el docker en ec2.
