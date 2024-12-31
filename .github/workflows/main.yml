@@ -132,6 +132,29 @@ jobs:
     needs: build-and-push-ecr-image
     runs-on: self-hosted
     steps:
+      - name: Check if AWS_ECR_LOGIN_URI is set
+        run: |
+          if [ -z "${{ secrets.AWS_ECR_LOGIN_URI }}" ]; then
+            echo "AWS_ECR_LOGIN_URI is not set"
+            exit 1
+          else
+            echo "AWS_ECR_LOGIN_URI is set"
+          fi
+
+      - name: Check if ECR_REPOSITORY_NAME is set
+        run: |
+          if [ -z "${{ secrets.ECR_REPOSITORY_NAME }}" ]; then
+            echo "ECR_REPOSITORY_NAME is not set"
+            exit 1
+          else
+            echo "ECR_REPOSITORY_NAME is set"
+          fi
+
+      - name: Print Current Directory
+        run: pwd
+
+      - name: List Files in Current Directory
+        run: ls -la
       - name: Checkout Code
         uses: actions/checkout@v3
 
