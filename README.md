@@ -49,3 +49,6 @@ aws configure
 """
 
 ![alt text](image-2.png)
+
+### CI/CD
+Se crea un repo en ECR en AWS
