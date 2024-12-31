@@ -55,3 +55,17 @@ Se crea un repo en ECR en AWS
 Se agrega el repo erc como secretos en github.
 
 el usuario im necesita permisos AmazonEC2ContainerRegistryFullAccess para logear el docker en ec2.
+
+#### Continuous deployment.
+EL self hosted es como un event listener
+
+Al lanzar la instancia ec2 (se lanza una instancia t2.medium de ubuntu), se deben ejecutar los siguientes comandos en ella:
+sudo apt-get update -y
+sudo apt-get upgrade
+
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker ubuntu
+newgrp docker
+
+una vez hecho esto vamos al repo de github y vamos a settings -> Actions -> Runners
